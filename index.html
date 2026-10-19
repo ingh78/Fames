@@ -1,273 +1,408 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>edm.frames — Everyday moments, framed</title>
-<meta name="description" content="Phone photos, edited into frames. Follow @edm.frames on Instagram.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%23f20d82'/><rect x='24' y='24' width='52' height='52' rx='6' fill='none' stroke='white' stroke-width='8'/></svg>">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Admin — edm.frames</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,300;0,500;0,800;1,300;1,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;500;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#000;--fg:#f4f4f2;--mute:#8a8a8a;--line:#222;--pink:#f20d82;--violet:#8a2be2;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--pad:clamp(16px,3vw,40px)}
-*,*::before,*::after{box-sizing:inherit;margin:0;padding:0}
-html{background:#000;height:100%}
-body{background:#000;color:var(--fg);font-family:"Inter Tight","Helvetica Neue",Helvetica,Arial,sans-serif;font-weight:300;line-height:1.45;overflow-x:clip;-webkit-font-smoothing:antialiased}
-a{color:inherit;text-decoration:none}
-img{display:block}
-:focus-visible{outline:2px solid var(--pink);outline-offset:3px}
-.ph{background:#111;overflow:hidden}
-.ph img{width:100%;height:100%;object-fit:cover}
+:root{--bg:#000;--card:#101010;--card2:#171717;--fg:#f4f4f2;--mute:#8a8a8a;--line:#262626;--pink:#f20d82;--violet:#8a2be2;--ok:#3ddc97;--bad:#ff5d6c}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--fg);font:400 15px/1.45 "Inter Tight","Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh}
+a{color:inherit}
+button,input,select,textarea{font:inherit;color:inherit}
+[hidden]{display:none!important}
+.grad{background:linear-gradient(90deg,var(--pink),var(--violet))}
 
-/* NAV */
-nav{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:60;display:flex;justify-content:space-between;align-items:center;padding:16px var(--pad);pointer-events:none}
-nav>*{pointer-events:auto}
-.logo{font-weight:800;font-size:14px;letter-spacing:-.02em;width:150px}
-.pill{display:flex;gap:2px;background:rgba(18,18,18,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid #2b2b2b;border-radius:99px;padding:3px}
-.pill a{padding:7px 15px;border-radius:99px;font-size:12.5px;font-weight:500;transition:background .35s,color .35s}
-.pill a.on,.pill a:hover{background:var(--fg);color:#000}
-.ig{width:150px;text-align:right;font-size:12px;font-weight:500}
-.ig span{display:inline-block;padding:7px 14px;border-radius:99px;background:#2a2a2a;transition:background .3s}
-.ig:hover span{background:linear-gradient(90deg,var(--pink),var(--violet))}
-@media(max-width:620px){.logo,.ig{width:auto}.ig{display:none}}
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:99px;padding:10px 18px;font-weight:500;font-size:14px;cursor:pointer;background:var(--fg);color:#000;transition:transform .2s,opacity .2s}
+.btn:hover{transform:scale(1.04)}
+.btn.grad{color:#fff;background:linear-gradient(90deg,var(--pink),var(--violet))}
+.btn.ghost{background:#222;color:var(--fg)}
+.btn.danger{background:#2a1115;color:var(--bad)}
+.btn.sm{padding:7px 12px;font-size:13px}
+.btn:disabled{opacity:.45;cursor:default;transform:none}
 
-/* HERO */
-.hero{position:relative;height:100svh;min-height:560px;overflow:hidden}
-.hero-in{position:absolute;inset:0;will-change:transform,opacity}
-.mw{position:absolute;left:1.4vw;right:0;bottom:0;height:.8em;font-size:18.2vw;line-height:.8;overflow:hidden;font-weight:800;letter-spacing:-.07em;white-space:nowrap}
-.mw span{display:inline-block;transform:translateY(105%);animation:rise 1.25s cubic-bezier(.16,1,.3,1) forwards;animation-delay:calc(.15s + var(--i)*70ms)}
-@keyframes rise{to{transform:none}}
-.mw i{font-style:normal;color:transparent;-webkit-text-stroke:0}
-.sm{position:absolute;font-size:clamp(10.5px,1vw,13px);color:var(--mute);max-width:15ch;opacity:0;animation:fade 1s ease forwards}
-.sm b{display:block;color:var(--fg);font-weight:500}
-@keyframes fade{to{opacity:1}}
-.cta{position:absolute;right:var(--pad);top:74px;font-size:11.5px;font-weight:500;background:#2a2a2a;border-radius:99px;padding:6px 14px;opacity:0;animation:fade 1s 1.2s ease forwards}
-.tag{position:absolute;right:var(--pad);bottom:calc(.8 * 18.2vw + 18px);width:min(34vw,420px);font-size:clamp(15px,1.7vw,24px);font-weight:500;line-height:1.08;letter-spacing:-.03em;opacity:0;animation:fade 1s 1.5s ease forwards}
-@media(max-width:700px){.tag{width:60vw;bottom:calc(.8 * 18.2vw + 14px)}.sm.s2,.sm.s3{display:none}}
+/* inputs */
+label.f{display:block;font-size:12px;color:var(--mute);margin-bottom:12px}
+label.f>span{display:block;margin-bottom:5px}
+input[type=text],input[type=email],input[type=password],input[type=url],textarea,select{color:var(--fg);width:100%;background:#0b0b0b;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:15px;outline:none;transition:border-color .2s}
+input:focus,textarea:focus,select:focus{border-color:var(--pink)}
+textarea{resize:vertical;min-height:70px}
+select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,#888 50%),linear-gradient(135deg,#888 50%,transparent 50%);background-position:calc(100% - 18px) 50%,calc(100% - 13px) 50%;background-size:5px 5px;background-repeat:no-repeat;padding-right:32px}
 
-/* featured zoom cards: small -> huge -> away */
-.feat{position:absolute;left:7vw;top:13svh;height:min(74svh,100vw);aspect-ratio:3/4;border-radius:clamp(16px,2vw,28px);transform-origin:0 0;opacity:0;box-shadow:0 40px 90px rgba(0,0,0,.7);animation:feat 16.8s cubic-bezier(.65,0,.25,1) infinite;animation-delay:calc(1.3s + var(--i)*4.2s);z-index:5}
-@keyframes feat{
- 0%{opacity:0;transform:translate(0,40svh) scale(.12) rotate(-10deg)}
- 2%{opacity:1}
- 6%{transform:translate(2vw,28svh) scale(.2) rotate(-5deg)}
- 13%{transform:translate(8vw,0) scale(1) rotate(0)}
- 19%{transform:translate(8vw,0) scale(1) rotate(0);opacity:1}
- 24%{transform:translate(48vw,6svh) scale(.22) rotate(8deg);opacity:1}
- 25%,100%{opacity:0;transform:translate(60vw,10svh) scale(.1)}
-}
-@media(max-width:700px){.feat{height:58svh;left:10vw}@keyframes feat{0%{opacity:0;transform:translate(0,40svh) scale(.12)}2%{opacity:1}6%{transform:translate(0,28svh) scale(.2)}13%,19%{transform:translate(0,0) scale(1);opacity:1}24%{transform:translate(40vw,6svh) scale(.2);opacity:1}25%,100%{opacity:0;transform:scale(.1)}}}
-.th{position:absolute;width:clamp(64px,8.5vw,140px);aspect-ratio:1;border-radius:14px;z-index:4;opacity:0;animation:pop .9s cubic-bezier(.16,1,.3,1) forwards,bob 6s ease-in-out infinite alternate;animation-delay:calc(1.6s + var(--i)*.18s),calc(3s + var(--i)*.4s)}
-@keyframes pop{from{opacity:0;transform:translateY(60px) scale(.5)}to{opacity:1;transform:none}}
-@keyframes bob{to{translate:0 -14px}}
+/* login */
+#login,#setup{min-height:100vh;display:grid;place-items:center;padding:24px}
+.box{width:min(420px,100%);background:var(--card);border:1px solid var(--line);border-radius:22px;padding:32px 26px}
+.box h1{font-size:28px;font-weight:800;letter-spacing:-.04em;line-height:1}
+.box h1 b{background:linear-gradient(90deg,var(--pink),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
+.box p.sub{color:var(--mute);margin:8px 0 22px;font-size:14px}
+.err{color:var(--bad);font-size:13px;margin:-2px 0 12px;min-height:18px}
+.box pre{background:#0b0b0b;border:1px solid var(--line);border-radius:10px;padding:12px;font-size:12.5px;overflow:auto;margin:12px 0}
 
-/* STORY (pinned) */
-.pin{position:relative}
-.pin>.in{position:sticky;top:0;height:100svh;overflow:hidden}
-.story{height:380svh}
-.story h2{position:absolute;left:var(--pad);top:50%;transform:translateY(-52%);font-size:clamp(46px,11.4vw,230px);font-weight:500;line-height:.9;letter-spacing:-.06em}
-.story h2 span{display:block;will-change:transform,filter,opacity}
-.story h2 em{font-weight:300}
-.story .cap{position:absolute;left:var(--pad);bottom:34px;font-size:13px;color:var(--mute);max-width:26ch}
-.story .cap2{left:auto;right:var(--pad);text-align:right}
-.fan{position:absolute;left:0;top:0;width:clamp(150px,22vw,380px);aspect-ratio:3/4;border-radius:clamp(14px,1.6vw,24px);will-change:transform;box-shadow:0 30px 70px rgba(0,0,0,.65)}
+/* app shell */
+.top{position:sticky;top:0;z-index:20;background:rgba(0,0,0,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px clamp(14px,3vw,32px);flex-wrap:wrap}
+.top .brand{font-weight:800;letter-spacing:-.03em;font-size:17px}
+.top .brand b{background:linear-gradient(90deg,var(--pink),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
+.top .r{display:flex;gap:8px;align-items:center}
+.tabs{display:flex;gap:4px;background:#121212;border:1px solid #2b2b2b;border-radius:99px;padding:3px;width:max-content;max-width:100%;margin:18px auto 0}
+.tabs button{border:0;background:none;padding:8px 18px;border-radius:99px;font-weight:500;font-size:14px;cursor:pointer;color:var(--mute)}
+.tabs button.on{background:var(--fg);color:#000}
+main.wrap{max-width:1180px;margin:0 auto;padding:22px clamp(14px,3vw,32px) 90px}
 
-/* WALL (pinned) */
-.wallsec{height:300svh}
-.stage{position:absolute;inset:0;perspective:1100px;overflow:hidden}
-.rows{position:absolute;left:-10vw;right:-10vw;top:-8svh;transform:rotateX(16deg) scale(1.12);transform-origin:50% 40%;display:flex;flex-direction:column;gap:1.1vw}
-.row{display:flex;gap:1.1vw;width:max-content;will-change:transform}
-.tile{height:25svh;aspect-ratio:var(--ar,3/4);border-radius:12px;transition:opacity .6s,filter .6s,transform .6s}
-.tile.dim{opacity:.1;filter:grayscale(1)}
-.shade{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 55% 40% at 50% 48%,rgba(0,0,0,.9),rgba(0,0,0,.55) 60%,transparent 100%),linear-gradient(#000 0,transparent 18%,transparent 70%,#000 100%)}
-.wc{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}
-.wc h3{font-size:clamp(30px,5.4vw,92px);font-weight:500;letter-spacing:-.05em;line-height:.95;max-width:12ch}
-.wc p{color:#bdbdbd;font-size:clamp(13px,1.1vw,16px);max-width:34ch;margin:14px 0 22px}
-.bar{display:flex;align-items:center;gap:10px;background:rgba(22,22,22,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid #333;border-radius:99px;padding:6px 6px 6px 22px;width:min(560px,88vw)}
-.bar span{flex:1;text-align:left;color:#9a9a9a;font-size:14px}
-.btn{display:inline-flex;align-items:center;gap:8px;background:var(--fg);color:#000;font-weight:500;font-size:14px;border-radius:99px;padding:11px 20px;transition:transform .3s,background .3s,color .3s}
-.btn:hover{transform:scale(1.05);background:linear-gradient(90deg,var(--pink),var(--violet));color:#fff}
-.btn svg{width:16px;height:16px}
-.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:18px}
-.chips button{font:500 12px "Inter Tight",sans-serif;color:var(--fg);background:rgba(25,25,25,.85);border:1px solid #333;border-radius:99px;padding:7px 15px;cursor:pointer;transition:background .3s,color .3s}
-.chips button.on,.chips button:hover{background:var(--fg);color:#000}
+/* photos */
+.bar{display:grid;grid-template-columns:1.1fr 1fr 1fr auto;gap:12px;align-items:end;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px}
+.bar label.f{margin:0}
+.up{position:relative;overflow:hidden}
+.up input{position:absolute;inset:0;opacity:0;cursor:pointer;font-size:0}
+.stat{display:flex;flex-wrap:wrap;gap:6px 16px;margin:14px 2px;color:var(--mute);font-size:13px}
+.stat b{color:var(--fg);font-weight:500}
+.stat .warn{color:#ffb454}
+.msg{margin:10px 2px;font-size:13px;color:var(--mute);min-height:18px}
+.msg.bad{color:var(--bad)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px;margin-top:6px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column}
+.card .img{position:relative;aspect-ratio:4/3;background:#080808}
+.card .img img{width:100%;height:100%;object-fit:cover;display:block}
+.card .img .n{position:absolute;left:10px;top:10px;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);border-radius:99px;padding:3px 10px;font-size:12px;font-weight:500}
+.card .img.busy::after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.55)}
+.card .body{padding:14px;display:flex;flex-direction:column;gap:2px}
+.chk{display:flex;flex-wrap:wrap;gap:6px 14px;margin:2px 0 12px}
+.chk label{display:flex;align-items:center;gap:7px;font-size:13px;cursor:pointer}
+.chk input{width:17px;height:17px;accent-color:var(--pink)}
+.act{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto}
+.act .btn{flex:1 1 auto}
 
-/* CREATORS */
-.cr{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,6vw,100px);align-items:center;padding:clamp(100px,16vw,220px) var(--pad)}
-.cr h2{font-size:clamp(40px,7vw,120px);font-weight:500;letter-spacing:-.055em;line-height:.92}
-.cr p{color:var(--mute);max-width:32ch;margin-top:22px}
-.cm{border-radius:18px;overflow:hidden;transform:rotate(3deg) translateY(30px);opacity:0;transition:transform 1.1s cubic-bezier(.16,1,.3,1),opacity 1s;box-shadow:0 30px 80px rgba(242,13,130,.18)}
-.cm.v{transform:rotate(-2deg);opacity:1}
-.cm:hover{transform:rotate(0) scale(1.03)}
-.cm img{width:100%}
-@media(max-width:800px){.cr{grid-template-columns:1fr}}
+/* text */
+.sect{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:16px}
+.sect h2{font-size:16px;font-weight:500;margin-bottom:4px}
+.sect p.h{color:var(--mute);font-size:13px;margin-bottom:16px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+.savebar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:rgba(0,0,0,.88);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:12px clamp(14px,3vw,32px);display:flex;justify-content:center;gap:12px;align-items:center}
+.cmt{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.cmt img{width:150px;border-radius:12px;border:1px solid var(--line)}
 
-/* FOOTER */
-footer{padding:0 var(--pad) 26px;overflow:hidden}
-.big{font-weight:800;font-size:18vw;line-height:.82;letter-spacing:-.07em;background:linear-gradient(90deg,var(--pink),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent;padding-bottom:.1em}
-.foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;border-top:1px solid var(--line);padding-top:18px;font-size:14px;color:var(--mute)}
-.foot b{color:var(--fg);font-weight:500}
-@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-delay:0s!important;transition:none!important}.mw span,.sm,.cta,.tag,.th{opacity:1;transform:none}}
-.sm i,.btn i{font-style:normal}
+#toast{position:fixed;left:50%;bottom:78px;transform:translate(-50%,20px);background:#1d1d1d;border:1px solid #333;border-radius:99px;padding:10px 18px;font-size:14px;opacity:0;pointer-events:none;transition:.3s;z-index:60;max-width:90vw;text-align:center}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+#toast.bad{border-color:var(--bad);color:var(--bad)}
+#toast.ok{border-color:var(--ok)}
+
+@media(max-width:760px){.bar{grid-template-columns:1fr 1fr}.bar .up{grid-column:1/-1}.two{grid-template-columns:1fr}.grid{grid-template-columns:1fr 1fr;gap:10px}.card .body{padding:10px}.act .btn{padding:7px 8px;font-size:12.5px}.chk label{font-size:12.5px}}
+@media(max-width:480px){.grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<nav>
-  <a class="logo" href="#top" data-t="logo_text">edm.frames</a>
-  <div class="pill" id="pill"><a href="#top" class="on" data-t="nav_1">Home</a><a href="#story" data-t="nav_2">Story</a><a href="#wall" data-t="nav_3">Frames</a><a href="#creators" data-t="nav_4">Love</a></div>
-  <a class="ig" data-href="instagram_url" href="https://www.instagram.com/edm.frames" target="_blank" rel="noopener"><span data-t="instagram_handle">@edm.frames</span></a>
-</nav>
 
-<header class="hero" id="top"><div class="hero-in" id="heroIn">
-  <div id="feats"></div><div id="ths"></div>
-  <div class="sm s1" style="left:var(--pad);top:74px;animation-delay:1s"><b data-t="hero_s1_title">Shot on mobile</b><i data-t="hero_s1_text">Every frame clicked on a phone.</i></div>
-  <div class="sm s2" style="left:26vw;top:74px;animation-delay:1.15s"><b data-t="hero_s2_title">Edited by hand</b><i data-t="hero_s2_text">Light, colour and crop.</i></div>
-  <div class="sm s3" style="left:46vw;top:74px;animation-delay:1.3s"><b data-t="hero_s3_title">Posted first</b><i data-t="hero_s3_text">On Instagram, as it happens.</i></div>
-  <a class="cta" data-href="instagram_url" href="https://www.instagram.com/edm.frames" target="_blank" rel="noopener" data-t="hero_cta">Follow on Instagram</a>
-  <p class="tag" data-t="hero_tagline">Everyday moments, turned into frames worth keeping.</p>
-  <h1 class="mw" id="mw" aria-label="edm.frames"></h1>
-</div></header>
-
-<section class="pin story" id="story"><div class="in">
-  <h2 id="sh"><span data-t="story_line1">Everyday</span><span><em data-t="story_line2">moments,</em></span><span data-t="story_line3">framed.</span></h2>
-  <p class="cap" data-t="story_cap1">Temples, rain, old scooters and slow evenings, edited one frame at a time.</p>
-  <p class="cap cap2" data-t="story_cap2">Scroll to see the frames.</p>
-  <div id="fan"></div>
-</div></section>
-
-<section class="pin wallsec" id="wall"><div class="in">
-  <div class="stage"><div class="rows" id="rows"></div></div>
-  <div class="shade"></div>
-  <div class="wc">
-    <h3 data-t="wall_title">Your next favourite frame is here</h3>
-    <p data-t="wall_text">New edits go up on Instagram first. Follow along and message to order a print.</p>
-    <div class="bar"><span data-t="instagram_display">instagram.com/edm.frames</span>
-      <a class="btn" data-href="instagram_url" href="https://www.instagram.com/edm.frames" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor"/></svg><i data-t="wall_button">Follow</i></a></div>
-    <div class="chips" id="chips"></div>
+<!-- config nahi bhara -->
+<div id="setup" hidden>
+  <div class="box">
+    <h1>Setup <b>baaki hai</b></h1>
+    <p class="sub">Website ki <b>config.js</b> file mein Supabase ki 2 cheezein abhi paste nahi hui hain.</p>
+    <pre>SUPABASE_URL: '...'
+SUPABASE_ANON_KEY: '...'</pre>
+    <p class="sub" style="margin:0">Guide ka Step 4 dekho, phir ye page reload karo.</p>
   </div>
-</div></section>
+</div>
 
-<section class="cr" id="creators">
-  <div><h2 data-t="creators_title">Creators<br>notice.</h2><p data-t="creators_text">A verified creator dropped a comment on one of our frames. Real feedback, straight from Instagram.</p></div>
-  <div class="cm" id="cm"><img id="cmImg" src="images/comment.jpg" alt="Instagram comment from verified account cemkivircik: Nice one"></div>
-</section>
+<!-- login -->
+<div id="login" hidden>
+  <form class="box" id="loginForm">
+    <h1>edm.frames <b>admin</b></h1>
+    <p class="sub">Apna email aur password daalo.</p>
+    <label class="f"><span>Email</span><input type="email" id="em" autocomplete="username" required></label>
+    <label class="f"><span>Password</span><input type="password" id="pw" autocomplete="current-password" required></label>
+    <div class="err" id="loginErr"></div>
+    <button class="btn grad" style="width:100%" id="loginBtn">Login</button>
+  </form>
+</div>
 
-<footer>
-  <div class="big" data-t="footer_big">edm.frames</div>
-  <div class="foot"><span>Managed by <b data-t="footer_managed">$atyam</b></span><a data-href="instagram_url" href="https://www.instagram.com/edm.frames" target="_blank" rel="noopener" data-t="footer_link">Instagram</a><span>Designed by <b data-t="footer_designed">$atyam</b></span></div>
-</footer>
+<!-- app -->
+<div id="app" hidden>
+  <header class="top">
+    <div class="brand">edm.frames <b>admin</b></div>
+    <div class="r">
+      <a class="btn ghost sm" href="../" target="_blank" rel="noopener">Website dekho ↗</a>
+      <button class="btn ghost sm" id="logout">Logout</button>
+    </div>
+  </header>
+  <nav class="tabs"><button data-tab="photos" class="on">Photos</button><button data-tab="text">Text &amp; Links</button></nav>
 
-<script src="config.js"></script>
+  <main class="wrap">
+    <!-- PHOTOS -->
+    <section id="tab-photos">
+      <div class="bar">
+        <label class="f"><span>Nayi photo ka tag (jaise Rain, Street)</span><input type="text" id="newTag" list="tagList" placeholder="tag likho"></label>
+        <label class="f"><span>Nayi photo kahan judegi</span>
+          <select id="newPos"><option value="start">Sabse pehle</option><option value="end">Sabse aakhir mein</option></select></label>
+        <div></div>
+        <div class="btn grad up">+ Photos add karo<input type="file" id="fileNew" accept="image/*" multiple></div>
+      </div>
+      <datalist id="tagList"></datalist>
+      <div class="msg" id="upMsg"></div>
+      <div class="stat" id="stat"></div>
+      <div class="grid" id="grid"></div>
+    </section>
+
+    <!-- TEXT -->
+    <section id="tab-text" hidden>
+      <div id="textForm"></div>
+    </section>
+  </main>
+
+  <div class="savebar" id="saveBar" hidden>
+    <span style="color:var(--mute);font-size:13px">Text badalne ke baad Save dabao</span>
+    <button class="btn grad" id="saveText">Save karo</button>
+  </div>
+</div>
+
+<input type="file" id="fileReplace" accept="image/*" hidden>
+<input type="file" id="fileComment" accept="image/*" hidden>
+<div id="toast"></div>
+
+<script src="../config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4"></script>
 <script>
-const CFG=window.EDM_CONFIG||{};
 const $=s=>document.querySelector(s);
-const clamp=(v,a=0,b=1)=>Math.min(b,Math.max(a,v));
-const ease=t=>t*t*(3-2*t);
+const CFG=window.EDM_CONFIG||{};
+const BUCKET='site-images';
+const U=u=>/^(https?:|data:)/.test(u)?u:'../'+u;   // photo ka sahi address
+const MAX_BIG=4,MAX_SMALL=5;
 
-/* ---- default photos (site yahi dikhata hai jab tak Supabase connect nahi hota) ---- */
-const DEFAULT_PHOTOS=[{"url":"images/p01.jpg","alt":"Radio on a log, Hindi caption","tag":"Street","sort_order":1,"hero_big":true,"hero_small":false,"story":false},{"url":"images/p02.jpg","alt":"Temple tower with flags","tag":"Heritage","sort_order":2,"hero_big":false,"hero_small":false,"story":true},{"url":"images/p03.jpg","alt":"Orange and white temple domes","tag":"Heritage","sort_order":3,"hero_big":true,"hero_small":false,"story":false},{"url":"images/p04.jpg","alt":"Rain and sunset on a village street","tag":"Rain","sort_order":4,"hero_big":false,"hero_small":true,"story":true},{"url":"images/p05.jpg","alt":"Wet rose leaves","tag":"Rain","sort_order":5,"hero_big":false,"hero_small":false,"story":false},{"url":"images/p06.jpg","alt":"Man walking with an umbrella","tag":"Rain","sort_order":6,"hero_big":false,"hero_small":false,"story":true},{"url":"images/p07.jpg","alt":"Child smiling through a box hole","tag":"Street","sort_order":7,"hero_big":false,"hero_small":false,"story":true},{"url":"images/p08.jpg","alt":"Old gateway at dusk","tag":"Heritage","sort_order":8,"hero_big":false,"hero_small":false,"story":false},{"url":"images/p09.jpg","alt":"Window in a mud wall","tag":"Heritage","sort_order":9,"hero_big":false,"hero_small":false,"story":true},{"url":"images/p10.jpg","alt":"Bare tree at sunset","tag":"Skies","sort_order":10,"hero_big":false,"hero_small":false,"story":true},{"url":"images/p11.jpg","alt":"Tower against the dusk","tag":"Skies","sort_order":11,"hero_big":false,"hero_small":true,"story":true},{"url":"images/p12.jpg","alt":"Temple domes and sky","tag":"Heritage","sort_order":12,"hero_big":false,"hero_small":false,"story":false},{"url":"images/p13.jpg","alt":"Single cloud","tag":"Skies","sort_order":13,"hero_big":false,"hero_small":true,"story":true},{"url":"images/p14.jpg","alt":"Old Bajaj scooter","tag":"Street","sort_order":14,"hero_big":true,"hero_small":false,"story":false},{"url":"images/p15.jpg","alt":"Museum wall of old photographs","tag":"Heritage","sort_order":15,"hero_big":false,"hero_small":true,"story":false},{"url":"images/p16.jpg","alt":"Musafir Cafe book in hand","tag":"Street","sort_order":16,"hero_big":false,"hero_small":false,"story":true},{"url":"images/p17.jpg","alt":"Sunset over the station","tag":"Skies","sort_order":17,"hero_big":false,"hero_small":true,"story":false},{"url":"images/p18.jpg","alt":"Ambassador car under trees","tag":"Street","sort_order":18,"hero_big":false,"hero_small":false,"story":true},{"url":"images/p19.jpg","alt":"Old mansion at night","tag":"Heritage","sort_order":19,"hero_big":true,"hero_small":false,"story":false}];
+/* ---------- Text fields (kya-kya badal sakte ho) ---------- */
+const GROUPS=[
+ {t:'Website ka naam (browser tab / Google)',h:'Tab mein aur Google search mein ye dikhta hai.',f:[
+  ['site_title','Tab ka title','text','edm.frames — Everyday moments, framed'],
+  ['site_description','Chhota description','textarea','Phone photos, edited into frames. Follow @edm.frames on Instagram.']]},
+ {t:'Instagram',h:'Saare Instagram buttons yahin se badlenge.',f:[
+  ['instagram_url','Instagram ka link','url','https://www.instagram.com/edm.frames'],
+  ['instagram_handle','Upar kone mein naam','text','@edm.frames'],
+  ['instagram_display','Frames section mein link ka text','text','instagram.com/edm.frames']]},
+ {t:'Top menu',h:'Upar ka naam aur 4 menu buttons.',f:[
+  ['logo_text','Logo (upar left)','text','edm.frames'],
+  ['nav_1','Menu 1','text','Home'],['nav_2','Menu 2','text','Story'],['nav_3','Menu 3','text','Frames'],['nav_4','Menu 4','text','Love']]},
+ {t:'Pehla screen (Hero)',h:'Sabse pehle jo dikhta hai.',f:[
+  ['wordmark','Bada naam (neeche bade letters)','text','edm.frames'],
+  ['hero_tagline','Tagline (right side)','textarea','Everyday moments, turned into frames worth keeping.'],
+  ['hero_cta','Instagram button ka text','text','Follow on Instagram'],
+  ['hero_s1_title','Chhota text 1: heading','text','Shot on mobile'],['hero_s1_text','Chhota text 1: line','text','Every frame clicked on a phone.'],
+  ['hero_s2_title','Chhota text 2: heading','text','Edited by hand'],['hero_s2_text','Chhota text 2: line','text','Light, colour and crop.'],
+  ['hero_s3_title','Chhota text 3: heading','text','Posted first'],['hero_s3_text','Chhota text 3: line','text','On Instagram, as it happens.']]},
+ {t:'Story section',h:'Scroll karne par aane wale bade shabd.',f:[
+  ['story_line1','Line 1','text','Everyday'],['story_line2','Line 2','text','moments,'],['story_line3','Line 3','text','framed.'],
+  ['story_cap1','Neeche left text','textarea','Temples, rain, old scooters and slow evenings, edited one frame at a time.'],
+  ['story_cap2','Neeche right text','text','Scroll to see the frames.']]},
+ {t:'Frames wall',h:'Photos wali wall ke beech ka text.',f:[
+  ['wall_title','Heading','text','Your next favourite frame is here'],
+  ['wall_text','Chhota paragraph','textarea','New edits go up on Instagram first. Follow along and message to order a print.'],
+  ['wall_button','Button ka text','text','Follow'],
+  ['tags','Filter buttons (comma se alag karo)','text','Heritage, Street, Skies, Rain']]},
+ {t:'Creators / Comment section',h:'Neeche comment wali photo aur uska text.',f:[
+  ['creators_title','Heading (naya line = Enter)','textarea','Creators\nnotice.'],
+  ['creators_text','Paragraph','textarea','A verified creator dropped a comment on one of our frames. Real feedback, straight from Instagram.'],
+  ['comment_alt','Comment photo ka description','text','Instagram comment from verified account cemkivircik: Nice one']]},
+ {t:'Footer',h:'Sabse neeche ka hissa.',f:[
+  ['footer_big','Bada naam','text','edm.frames'],
+  ['footer_managed','Managed by','text','$atyam'],
+  ['footer_designed','Designed by','text','$atyam'],
+  ['footer_link','Instagram link ka text','text','Instagram']]}
+];
+const DEFAULT_COMMENT='images/comment.jpg';
 
-/* ---- data helpers ---- */
-const THUMB_POS=[['58vw','22svh'],['67vw','35svh'],['79vw','24svh'],['72vw','10svh'],['88vw','36svh']];
-let photos=DEFAULT_PHOTOS,settings={};
-const ph=(p,cls='',lazy)=>{const d=document.createElement('div');d.className='ph '+cls;const im=new Image();im.alt=p.alt||'';im.decoding='async';if(lazy)im.loading='lazy';im.src=p.url;d.appendChild(im);return d};
-const pick=(P,f,max)=>{let a=P.filter(p=>p[f]);if(!a.length)a=P.slice(0,max);return a.slice(0,max)};
-function setText(el,v){el.textContent='';String(v).split('\n').forEach((line,i)=>{if(i)el.appendChild(document.createElement('br'));el.appendChild(document.createTextNode(line))})}
+/* ---------- helpers ---------- */
+function toast(msg,kind=''){const t=$('#toast');t.textContent=msg;t.className='show '+kind;clearTimeout(toast.t);toast.t=setTimeout(()=>t.className='',2600)}
+function nice(e){const m=(e&&e.message)||String(e);
+  if(/row-level security|violates|permission|not authorized|403/i.test(m))return 'Permission nahi mili. Check karo ki SQL mein tumhara email sahi hai aur tum usi email se login ho.';
+  if(/Failed to fetch|NetworkError|network/i.test(m))return 'Internet ya Supabase se connect nahi ho pa raha.';
+  return m}
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-/* ---- text, links, wordmark ---- */
-let wordShown='';
-function buildWordmark(text){
-  if(text===wordShown)return;wordShown=text;
-  const mw=$('#mw');mw.textContent='';mw.setAttribute('aria-label',text);
-  [...text].forEach((c,i)=>{const s=document.createElement('span');s.textContent=c;s.style.setProperty('--i',i);mw.appendChild(s)});
+if(!CFG.SUPABASE_URL||!CFG.SUPABASE_ANON_KEY||/YOUR_/.test(CFG.SUPABASE_URL)){ $('#setup').hidden=false; }
+else init();
+
+function init(){
+const sb=supabase.createClient(CFG.SUPABASE_URL,CFG.SUPABASE_ANON_KEY);
+let photos=[],settings={};
+
+/* ---------- login / logout ---------- */
+async function showFor(session){
+  $('#login').hidden=!!session;$('#app').hidden=!session;
+  if(session){await loadAll()}
 }
-function applyText(s){
-  document.querySelectorAll('[data-t]').forEach(el=>{const k=el.dataset.t;if(k in s)setText(el,s[k])});
-  document.querySelectorAll('[data-href]').forEach(el=>{const k=el.dataset.href;if(s[k])el.href=s[k]});
-  if(s.site_title)document.title=s.site_title;
-  if(s.site_description){const m=document.querySelector('meta[name=description]');if(m)m.content=s.site_description}
-  if(s.comment_image)$('#cmImg').src=s.comment_image;
-  if(s.comment_alt)$('#cmImg').alt=s.comment_alt;
-  buildWordmark(s.wordmark||'edm.frames');
+sb.auth.getSession().then(({data})=>showFor(data.session));
+sb.auth.onAuthStateChange((ev,session)=>{ if(ev==='SIGNED_OUT')showFor(null) });
+$('#loginForm').addEventListener('submit',async e=>{
+  e.preventDefault();$('#loginErr').textContent='';$('#loginBtn').disabled=true;
+  const {data,error}=await sb.auth.signInWithPassword({email:$('#em').value.trim(),password:$('#pw').value});
+  $('#loginBtn').disabled=false;
+  if(error){$('#loginErr').textContent=/invalid/i.test(error.message)?'Email ya password galat hai.':nice(error);return}
+  showFor(data.session);
+});
+$('#logout').onclick=async()=>{await sb.auth.signOut();showFor(null)};
+
+/* ---------- tabs ---------- */
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('on',x===b));
+  $('#tab-photos').hidden=b.dataset.tab!=='photos';$('#tab-text').hidden=b.dataset.tab!=='text';
+  $('#saveBar').hidden=b.dataset.tab!=='text';
+});
+
+/* ---------- load ---------- */
+async function loadAll(){
+  const [p,s]=await Promise.all([
+    sb.from('photos').select('*').order('sort_order',{ascending:true}).order('created_at',{ascending:true}),
+    sb.from('settings').select('key,value')]);
+  if(p.error){toast(nice(p.error),'bad');$('#upMsg').textContent='Photos load nahi hui: '+nice(p.error);$('#upMsg').className='msg bad';return}
+  if(s.error){toast(nice(s.error),'bad');return}
+  photos=p.data||[];settings={};(s.data||[]).forEach(r=>settings[r.key]=r.value);
+  renderPhotos();renderText();
 }
 
-/* ---- sections built from photos ---- */
-let fans=[],rows=[];
-function build(){
-  const P=photos;if(!P.length)return;
-  $('#feats').textContent='';$('#ths').textContent='';$('#fan').textContent='';$('#rows').textContent='';$('#chips').textContent='';
-  pick(P,'hero_big',4).forEach((p,i)=>{const d=ph(p,'feat');d.style.setProperty('--i',i);$('#feats').appendChild(d)});
-  pick(P,'hero_small',5).forEach((p,i)=>{const d=ph(p,'th');const[l,t]=THUMB_POS[i];d.style.cssText=`left:${l};top:${t};--i:${i}`;$('#ths').appendChild(d)});
-  fans=pick(P,'story',12).map(p=>{const d=ph(p,'fan');$('#fan').appendChild(d);return d});
-  rows=[];
-  for(let r=0;r<4;r++){
-    const row=document.createElement('div');row.className='row';
-    for(let k=0;k<16;k++){const p=P[(k*3+r*5)%P.length];const t=ph(p,'tile',true);t.dataset.t=p.tag||'';t.style.setProperty('--ar',(k+r)%4==0?'1/1':(k+r)%3==0?'4/5':'3/4');row.appendChild(t)}
-    $('#rows').appendChild(row);rows.push(row);
+/* ---------- photos ---------- */
+function renderPhotos(){
+  const tags=[...new Set([...(settings.tags||'Heritage, Street, Skies, Rain').split(',').map(x=>x.trim()),...photos.map(p=>p.tag)].filter(Boolean))];
+  $('#tagList').innerHTML=tags.map(t=>`<option value="${esc(t)}">`).join('');
+  const nb=photos.filter(p=>p.hero_big).length,ns=photos.filter(p=>p.hero_small).length;
+  $('#stat').innerHTML=`<span>Total photos: <b>${photos.length}</b></span>
+    <span class="${nb>MAX_BIG?'warn':''}">Hero bada: <b>${nb}</b> / ${MAX_BIG}${nb>MAX_BIG?' (sirf pehle '+MAX_BIG+' dikhengi)':''}</span>
+    <span class="${ns>MAX_SMALL?'warn':''}">Hero chhota: <b>${ns}</b> / ${MAX_SMALL}${ns>MAX_SMALL?' (sirf pehle '+MAX_SMALL+' dikhengi)':''}</span>`;
+  $('#grid').innerHTML=photos.map((p,i)=>`
+   <div class="card" data-id="${p.id}">
+     <div class="img"><img src="${esc(U(p.url))}" alt="" loading="lazy"><span class="n">#${i+1}</span></div>
+     <div class="body">
+       <label class="f"><span>Photo ka description</span><input type="text" data-k="alt" value="${esc(p.alt)}" placeholder="jaise: Rain mein ek gali"></label>
+       <label class="f"><span>Tag</span><input type="text" data-k="tag" list="tagList" value="${esc(p.tag)}" placeholder="jaise: Rain"></label>
+       <div class="chk">
+         <label><input type="checkbox" data-k="hero_big" ${p.hero_big?'checked':''}> Hero bada</label>
+         <label><input type="checkbox" data-k="hero_small" ${p.hero_small?'checked':''}> Hero chhota</label>
+         <label><input type="checkbox" data-k="story" ${p.story?'checked':''}> Story</label>
+       </div>
+       <div class="act">
+         <button class="btn ghost sm" data-a="left" ${i===0?'disabled':''} title="Pehle laao">◀</button>
+         <button class="btn ghost sm" data-a="right" ${i===photos.length-1?'disabled':''} title="Baad mein bhejo">▶</button>
+         <button class="btn ghost sm" data-a="replace">Photo badlo</button>
+         <button class="btn danger sm" data-a="del">Delete</button>
+       </div>
+     </div>
+   </div>`).join('');
+}
+let replaceId=null;
+$('#grid').addEventListener('change',async e=>{
+  const el=e.target.closest('[data-k]');if(!el)return;
+  const card=el.closest('.card'),p=photos.find(x=>x.id===card.dataset.id);if(!p)return;
+  const k=el.dataset.k,v=el.type==='checkbox'?el.checked:el.value.trim();
+  const {error}=await sb.from('photos').update({[k]:v}).eq('id',p.id);
+  if(error){toast(nice(error),'bad');el.type==='checkbox'?(el.checked=!v):(el.value=p[k]);return}
+  p[k]=v;toast('Save ho gaya ✓','ok');
+  if(el.type==='checkbox'||k==='tag')renderPhotos();
+});
+$('#grid').addEventListener('click',async e=>{
+  const b=e.target.closest('[data-a]');if(!b)return;
+  const card=b.closest('.card'),id=card.dataset.id,i=photos.findIndex(x=>x.id===id),p=photos[i];
+  if(b.dataset.a==='replace'){replaceId=id;$('#fileReplace').value='';$('#fileReplace').click();return}
+  if(b.dataset.a==='left'||b.dataset.a==='right'){
+    const j=b.dataset.a==='left'?i-1:i+1,q=photos[j];if(!q)return;
+    let a=p.sort_order,c=q.sort_order;if(a===c){c=a+(j>i?1:-1)}  // barabar ho to alag karo
+    const [r1,r2]=await Promise.all([sb.from('photos').update({sort_order:c}).eq('id',p.id),sb.from('photos').update({sort_order:a}).eq('id',q.id)]);
+    if(r1.error||r2.error){toast(nice(r1.error||r2.error),'bad');return}
+    p.sort_order=c;q.sort_order=a;photos.sort((x,y)=>x.sort_order-y.sort_order);renderPhotos();toast('Jagah badal gayi ✓','ok');return}
+  if(b.dataset.a==='del'){
+    if(!confirm('Ye photo website se hamesha ke liye hat jayegi. Pakka delete karna hai?'))return;
+    const {error}=await sb.from('photos').delete().eq('id',id);
+    if(error){toast(nice(error),'bad');return}
+    await removeFile(p.url);photos=photos.filter(x=>x.id!==id);renderPhotos();toast('Delete ho gayi','ok')}
+});
+
+async function compress(file,max=1800,q=.86){
+  let bmp;
+  try{bmp=await createImageBitmap(file,{imageOrientation:'from-image'})}catch(_){bmp=await createImageBitmap(file)}
+  const r=Math.min(1,max/Math.max(bmp.width,bmp.height));
+  const c=document.createElement('canvas');c.width=Math.round(bmp.width*r);c.height=Math.round(bmp.height*r);
+  c.getContext('2d').drawImage(bmp,0,0,c.width,c.height);
+  return new Promise((res,rej)=>c.toBlob(b=>b?res(b):rej(new Error('Photo process nahi ho payi')),'image/jpeg',q));
+}
+async function uploadFile(file,folder='photos'){
+  const blob=await compress(file);
+  const path=`${folder}/${Date.now()}-${Math.random().toString(36).slice(2,8)}.jpg`;
+  const {error}=await sb.storage.from(BUCKET).upload(path,blob,{contentType:'image/jpeg',cacheControl:'31536000'});
+  if(error)throw error;
+  return sb.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;
+}
+async function removeFile(url){
+  const m=String(url).match(/\/storage\/v1\/object\/public\/site-images\/(.+)$/);
+  if(m)await sb.storage.from(BUCKET).remove([decodeURIComponent(m[1])]);
+}
+function upMsg(t,bad){const m=$('#upMsg');m.textContent=t;m.className='msg'+(bad?' bad':'')}
+
+$('#fileNew').addEventListener('change',async e=>{
+  const files=[...e.target.files];if(!files.length)return;
+  const tag=$('#newTag').value.trim(),start=$('#newPos').value==='start';
+  const orders=photos.map(p=>p.sort_order),n=files.length;
+  const base=start?(orders.length?Math.min(...orders):1)-n:(orders.length?Math.max(...orders):0)+1;
+  let done=0,failed=0;
+  for(const [i,f] of files.entries()){
+    upMsg(`Upload ho rahi hai… ${i+1} / ${n}`);
+    try{
+      const url=await uploadFile(f);
+      const row={url,alt:f.name.replace(/\.[^.]+$/,'').replace(/[_-]+/g,' '),tag,sort_order:base+i};
+      const {data,error}=await sb.from('photos').insert(row).select().single();
+      if(error)throw error;photos.push(data);done++;
+    }catch(err){failed++;console.error(err);upMsg('Ek photo fail hui: '+nice(err),true)}
   }
-  /* filter chips: pehle settings wali list, phir baaki tags */
-  let tags=(settings.tags||'Heritage, Street, Skies, Rain').split(',').map(x=>x.trim()).filter(Boolean);
-  P.forEach(p=>{if(p.tag&&!tags.includes(p.tag))tags.push(p.tag)});
-  ['All',...tags].forEach((t,i)=>{const b=document.createElement('button');b.textContent=t;if(!i)b.className='on';b.onclick=()=>{document.querySelectorAll('.chips button').forEach(x=>x.classList.toggle('on',x===b));document.querySelectorAll('.tile').forEach(x=>x.classList.toggle('dim',t!=='All'&&x.dataset.t!==t))};$('#chips').appendChild(b)});
-}
+  photos.sort((a,b)=>a.sort_order-b.sort_order);renderPhotos();e.target.value='';
+  if(failed===0)upMsg(`${done} photo add ho gayi ✓ Ab neeche unka description likh do.`);
+  toast(done?`${done} photo add hui ✓`:'Upload nahi hui','ok');
+});
+$('#fileReplace').addEventListener('change',async e=>{
+  const f=e.target.files[0];if(!f||!replaceId)return;
+  const p=photos.find(x=>x.id===replaceId),card=document.querySelector(`.card[data-id="${replaceId}"] .img`);
+  if(card)card.classList.add('busy');toast('Nayi photo upload ho rahi hai…');
+  try{
+    const url=await uploadFile(f);
+    const {error}=await sb.from('photos').update({url}).eq('id',p.id);
+    if(error)throw error;
+    await removeFile(p.url);p.url=url;toast('Photo badal gayi ✓','ok');
+  }catch(err){toast(nice(err),'bad')}
+  renderPhotos();replaceId=null;
+});
 
-/* ---- Supabase se data (agar config bhara hai) ---- */
-async function load(){
-  if(!CFG.SUPABASE_URL||!CFG.SUPABASE_ANON_KEY||/YOUR_/.test(CFG.SUPABASE_URL))return null;
-  const h={apikey:CFG.SUPABASE_ANON_KEY};
-  const [a,b]=await Promise.all([
-    fetch(CFG.SUPABASE_URL+'/rest/v1/photos?select=*&order=sort_order.asc,created_at.asc',{headers:h}),
-    fetch(CFG.SUPABASE_URL+'/rest/v1/settings?select=key,value',{headers:h})]);
-  if(!a.ok||!b.ok)throw new Error('load failed');
-  const pr=await a.json(),sr=await b.json(),s={};
-  sr.forEach(r=>s[r.key]=r.value);
-  return {photos:pr.length?pr:DEFAULT_PHOTOS,settings:s};
+/* ---------- text ---------- */
+function renderText(){
+  $('#textForm').innerHTML=GROUPS.map((g,gi)=>`
+   <div class="sect"><h2>${esc(g.t)}</h2><p class="h">${esc(g.h)}</p>
+     <div class="two">${g.f.map(([k,l,type,def])=>{
+       const v=k in settings?settings[k]:def;
+       return `<label class="f"><span>${esc(l)}</span>${type==='textarea'
+         ?`<textarea data-key="${k}">${esc(v)}</textarea>`
+         :`<input type="${type==='url'?'url':'text'}" data-key="${k}" value="${esc(v)}">`}</label>`}).join('')}
+       ${gi===6?`<div class="f" style="grid-column:1/-1"><span style="display:block;margin-bottom:8px;font-size:12px;color:var(--mute)">Comment wali photo</span>
+         <div class="cmt"><img id="cmtPrev" src="${esc(U(settings.comment_image||DEFAULT_COMMENT))}" alt="">
+         <button class="btn ghost sm" id="cmtBtn" type="button">Comment photo badlo</button></div></div>`:''}
+     </div></div>`).join('');
+  $('#cmtBtn').onclick=()=>{$('#fileComment').value='';$('#fileComment').click()};
 }
-let applied='';
-function apply(d){const j=JSON.stringify(d);if(j===applied)return;applied=j;photos=d.photos;settings=d.settings;applyText(settings);build()}
-(async()=>{
-  let cached=null;try{cached=JSON.parse(localStorage.getItem('edm_cache_v1'))}catch(e){}
-  const fresh=load().catch(()=>null);
-  let first=cached;
-  if(!first)first=await Promise.race([fresh,new Promise(r=>setTimeout(()=>r(null),1500))]);
-  apply(first||{photos:DEFAULT_PHOTOS,settings:{}});
-  const d=await fresh;
-  if(d){try{localStorage.setItem('edm_cache_v1',JSON.stringify(d))}catch(e){}apply(d)}
-})();
-
-/* ---- smooth scroll-driven engine ---- */
-const story=$('#story'),wall=$('#wall'),heroIn=$('#heroIn'),sh=[...$('#sh').children];
-let cur=scrollY,tgt=scrollY;
-const prog=(el,y)=>clamp((y-el.offsetTop)/(el.offsetHeight-innerHeight));
-function frame(){
-  tgt=scrollY;cur+=(tgt-cur)*.085;if(Math.abs(tgt-cur)<.1)cur=tgt;
-  const vw=innerWidth,vh=innerHeight;
-  const hp=clamp(cur/vh);heroIn.style.transform=`translateY(${hp*8}vh) scale(${1-hp*.04})`;heroIn.style.opacity=1-hp*.9;
-  const p=prog(story,cur);
-  sh.forEach((s,i)=>{const t=ease(clamp((p-.03-i*.07)/.16));s.style.opacity=t;s.style.filter=`blur(${(1-t)*18}px)`;s.style.transform=`translateY(${(1-t)*40}px)`});
-  const out=ease(clamp((p-.9)/.1));story.firstElementChild.style.opacity=1-out*0;
-  const cw=Math.max(150,vw*.22),ch=cw*4/3;
-  fans.forEach((f,i)=>{
-    const t=ease(clamp((p-.1-i*.06)/.5));
-    const x=(1.08*vw)-t*(1.08*vw+cw*1.2);
-    const y=(vh-ch)/2+Math.sin(i*2.1)*vh*.2;
-    const rot=(1-t)*10-5+Math.sin(i)*4;
-    f.style.transform=`translate(${x}px,${y}px) rotate(${rot}deg) scale(${.9+t*.15})`;
-    f.style.zIndex=i;
-  });
-  const wp=prog(wall,cur);
-  rows.forEach((r,i)=>{const d=(i%2?1:-1)*(wp-.5)*vw*.9;r.style.transform=`translateX(${d-(i%2?0:vw*.35)}px)`});
-  requestAnimationFrame(frame);
+$('#saveText').onclick=async()=>{
+  const rows=[...document.querySelectorAll('#textForm [data-key]')].map(el=>({key:el.dataset.key,value:el.value}));
+  $('#saveText').disabled=true;
+  const {error}=await sb.from('settings').upsert(rows.map(r=>({...r,updated_at:new Date().toISOString()})),{onConflict:'key'});
+  $('#saveText').disabled=false;
+  if(error){toast(nice(error),'bad');return}
+  rows.forEach(r=>settings[r.key]=r.value);toast('Text save ho gaya ✓ Website refresh karke dekho','ok');
+};
+$('#fileComment').addEventListener('change',async e=>{
+  const f=e.target.files[0];if(!f)return;toast('Upload ho rahi hai…');
+  try{
+    const url=await uploadFile(f,'comment');
+    const old=settings.comment_image;
+    const {error}=await sb.from('settings').upsert({key:'comment_image',value:url,updated_at:new Date().toISOString()},{onConflict:'key'});
+    if(error)throw error;
+    if(old)await removeFile(old);
+    settings.comment_image=url;$('#cmtPrev').src=url;toast('Comment photo badal gayi ✓','ok');
+  }catch(err){toast(nice(err),'bad')}
+});
 }
-frame();
-
-/* ---- nav highlight + comment reveal ---- */
-const links=[...document.querySelectorAll('#pill a')];
-const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)links.forEach(l=>l.classList.toggle('on',l.getAttribute('href')==='#'+e.target.id))}),{threshold:.3});
-['top','story','wall','creators'].forEach(id=>io.observe(document.getElementById(id)));
-new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('v');o.unobserve(e.target)}}),{threshold:.3}).observe($('#cm'));
-links.forEach(l=>l.addEventListener('click',e=>{e.preventDefault();const t=document.querySelector(l.getAttribute('href'));scrollTo({top:t.offsetTop,behavior:'smooth'})}));
 </script>
 </body>
 </html>
